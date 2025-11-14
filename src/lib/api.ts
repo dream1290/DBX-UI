@@ -249,14 +249,21 @@ class ApiService {
   }
 
   async register(email: string, password: string, fullName: string, organizationId?: string) {
+    // Build request body - only include organization_id if it's provided and not empty
+    const requestBody: any = {
+      email,
+      password,
+      full_name: fullName,  // Backend expects 'full_name' not 'name'
+    };
+    
+    // Only add organization_id if it's a valid non-empty string
+    if (organizationId && organizationId.trim() !== '') {
+      requestBody.organization_id = organizationId;
+    }
+    
     const response = await this.request<any>('/api/v2/auth/register', {
       method: 'POST',
-      body: JSON.stringify({
-        email,
-        password,
-        full_name: fullName,  // Backend expects 'full_name' not 'name'
-        organization_id: organizationId || null  // Backend expects 'organization_id' not 'organization'
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     // WORKAROUND: Backend bug - it returns only user object without tokens
