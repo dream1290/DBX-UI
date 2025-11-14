@@ -1,5 +1,5 @@
 // API Configuration and Base Service
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://dbxmpv-production.up.railway.app';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://dbx-production-3690.up.railway.app';
 
 class ApiError extends Error {
   constructor(
