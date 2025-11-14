@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* DBX AI Aviation Analytics - Genomic-Inspired Design System 
+Scientific precision meets aviation analytics. All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core Genomic-Inspired Aviation Palette */
+    --background: 215 28% 9%;          /* Deep charcoal (#0F172A) */
+    --foreground: 210 40% 98%;         /* Near white for text */
+
+    --card: 215 25% 11.5%;             /* Dark slate (#1E293B) */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 215 25% 11.5%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Aircraft Type Colors */
+    --multirotor: 217 91% 60%;         /* Electric blue (#3B82F6) */
+    --multirotor-foreground: 210 40% 98%;
+    
+    --fixed-wing: 158 64% 52%;         /* Emerald (#10B981) */
+    --fixed-wing-dark: 158 64% 42%;    /* Darker emerald (#059669) */
+    --fixed-wing-foreground: 210 40% 98%;
+    
+    --vtol: 243 75% 59%;               /* Amethyst purple (#8B5CF6) */
+    --vtol-foreground: 210 40% 98%;
+
+    /* Risk Assessment Colors */
+    --risk-low: 142 76% 36%;           /* Neo-green (#22C55E) */
+    --risk-medium: 38 92% 50%;         /* Amber (#F59E0B) */
+    --risk-high: 0 84% 60%;            /* Crimson (#EF4444) */
+
+    /* System Colors */
+    --primary: 217 91% 60%;            /* Electric blue */
+    --primary-foreground: 215 28% 9%;
+    --primary-glow: 217 91% 70%;       /* Lighter blue for effects */
+
+    --secondary: 215 25% 18%;          /* Slightly lighter slate */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 20% 15%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 158 64% 52%;             /* Emerald accent */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 25% 20%;             /* Subtle borders */
+    --input: 215 25% 18%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;                 /* Slightly more rounded */
+
+    /* Genomic-Inspired Gradients */
+    --gradient-multirotor: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
+    --gradient-fixed-wing: linear-gradient(135deg, hsl(158 64% 52%), hsl(158 64% 42%));
+    --gradient-vtol: linear-gradient(135deg, hsl(243 75% 59%), hsl(243 75% 69%));
+    --gradient-risk-low: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 46%));
+    --gradient-risk-medium: linear-gradient(135deg, hsl(38 92% 50%), hsl(38 92% 60%));
+    --gradient-risk-high: linear-gradient(135deg, hsl(0 84% 60%), hsl(0 84% 70%));
+
+    /* Genomic Data Visualization */
+    --genomic-blue: 217 91% 60%;
+    --genomic-green: 158 64% 52%;
+    --genomic-purple: 243 75% 59%;
+    --genomic-orange: 38 92% 50%;
+    --genomic-cyan: 185 81% 54%;
+    --genomic-pink: 326 78% 66%;
+
+    /* Scientific Precision Effects */
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.3);
+    --shadow-card: 0 10px 30px -10px hsl(215 28% 5% / 0.5);
+    --transition-scientific: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-dna-helix: dna-helix 3s ease-in-out infinite;
+
+    /* Sidebar Aviation Command Center */
+    --sidebar-background: 215 30% 8%;
+    --sidebar-foreground: 210 40% 90%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 215 28% 9%;
+    --sidebar-accent: 215 25% 12%;
+    --sidebar-accent-foreground: 210 40% 90%;
+    --sidebar-border: 215 25% 15%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  /* Light mode (keep minimal for aviation use) */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 215 28% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 9%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 215 28% 9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+/* Typography Enhancements - Kiro.dev Inspired */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.875rem);
+  font-weight: 600;
+}
+
+p {
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.font-mono {
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    /* Genomic-inspired background pattern */
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(217 91% 60% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(158 64% 52% / 0.05) 0%, transparent 50%);
+  }
+
+  /* Scientific DNA-inspired animations */
+  @keyframes dna-helix {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    25% { transform: rotate(90deg) translateY(-2px); }
+    50% { transform: rotate(180deg) translateY(0px); }
+    75% { transform: rotate(270deg) translateY(2px); }
+  }
+
+  @keyframes genomic-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s ease infinite;
+  }
+
+  /* Genomic-inspired component variants */
+  .genomic-card {
+    @apply bg-card border border-border/50 rounded-lg p-6 shadow-lg;
+    background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--card) / 0.8));
+  }
+
+  .risk-indicator {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+
+  .risk-low {
+    @apply bg-gradient-to-r from-risk-low to-green-400 text-white;
+  }
+
+  .risk-medium {
+    @apply bg-gradient-to-r from-risk-medium to-yellow-400 text-white;
+  }
+
+  .risk-high {
+    @apply bg-gradient-to-r from-risk-high to-red-400 text-white;
+  }
+
+  .aircraft-multirotor {
+    @apply bg-gradient-to-r from-multirotor to-blue-400 text-multirotor-foreground;
+  }
+
+  .aircraft-fixed-wing {
+    @apply bg-gradient-to-r from-fixed-wing to-fixed-wing-dark text-fixed-wing-foreground;
+  }
+
+  .aircraft-vtol {
+    @apply bg-gradient-to-r from-vtol to-purple-400 text-vtol-foreground;
+  }
+
+  .mono-genomic {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.025em;
+  }
+}
+
