@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Upload, FileText, Zap, CheckCircle, AlertCircle, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Upload, FileText, Zap, CheckCircle, AlertCircle, Clock, ExternalLink } from "lucide-react";
 import { FileHandler } from "@/components/genomic/FileHandler";
 import { GenomicCard } from "@/components/genomic/GenomicCard";
 import { ConservationScore } from "@/components/genomic/ConservationScore";
@@ -53,10 +54,18 @@ const UploadData = () => {
   const handleFilesUploaded = async (files: File[]) => {
     for (const file of files) {
       const jobId = `job_${Date.now()}_${Math.random()}`;
+      
+      // Validate file
+      if (!file || file.size === 0) {
+        console.error('Invalid or empty file:', file);
+        continue;
+      }
+      
+      const fileSizeMB = file.size / 1024 / 1024;
       const newJob: AnalysisJob = {
         id: jobId,
         filename: file.name,
-        fileSize: Number((file.size / 1024 / 1024).toFixed(1)),
+        fileSize: Number(fileSizeMB.toFixed(2)),
         status: "queued",
         progress: 0,
       };
@@ -69,8 +78,10 @@ const UploadData = () => {
           j.id === jobId ? { ...j, status: "processing" as const, startTime: new Date() } : j
         ));
 
-        // Upload file
-        await analyzeFlight.mutateAsync({ file });
+        // Upload file with error logging
+        console.log('Uploading file:', file.name, 'Size:', fileSizeMB.toFixed(2), 'MB');
+        const result = await analyzeFlight.mutateAsync({ file });
+        console.log('Analysis result:', result);
 
         // Update to completed
         setAnalysisJobs(prev => prev.map(j => 
@@ -82,6 +93,7 @@ const UploadData = () => {
           } : j
         ));
       } catch (error) {
+        console.error('Analysis failed for file:', file.name, error);
         setAnalysisJobs(prev => prev.map(j => 
           j.id === jobId ? { ...j, status: "error" as const } : j
         ));

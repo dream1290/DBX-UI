@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBX Auth Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 DBX Authentication Test</h1>
+    <p><strong>Backend URL:</strong> <span id="api-url"></span></p>
+
+    <div class="test-section">
+        <h2>1. Health Check</h2>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="health-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Login Test</h2>
+        <input type="email" id="login-email" placeholder="Email" value="admin@dbx.com" style="padding: 8px; width: 200px;">
+        <input type="password" id="login-password" placeholder="Password" value="admin123" style="padding: 8px; width: 200px;">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="login-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Registration Test</h2>
+        <input type="email" id="reg-email" placeholder="Email" value="test@example.com" style="padding: 8px; width: 200px;">
+        <input type="password" id="reg-password" placeholder="Password" value="test123" style="padding: 8px; width: 200px;">
+        <input type="text" id="reg-name" placeholder="Full Name" value="Test User" style="padding: 8px; width: 200px;">
+        <button onclick="testRegister()">Test Register</button>
+        <div id="register-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Profile Test (requires login)</h2>
+        <button onclick="testProfile()">Test Get Profile</button>
+        <div id="profile-result" class="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://dbx-production-3690.up.railway.app';
+        document.getElementById('api-url').textContent = API_URL;
+
+        let accessToken = null;
+
+        function showResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.textContent = JSON.stringify(data, null, 2);
+            element.className = isError ? 'result error' : 'result success';
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                showResult('health-result', { status: response.status, data });
+            } catch (error) {
+                showResult('health-result', { error: error.message }, true);
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                const formData = new URLSearchParams();
+                formData.append('username', email);
+                formData.append('password', password);
+
+                const response = await fetch(`${API_URL}/api/v2/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    accessToken = data.access_token;
+                    localStorage.setItem('access_token', accessToken);
+                    showResult('login-result', { 
+                        status: response.status, 
+                        message: 'Login successful!',
+                        user: data.user,
+                        token_preview: accessToken.substring(0, 50) + '...'
+                    });
+                } else {
+                    showResult('login-result', { status: response.status, error: data }, true);
+                }
+            } catch (error) {
+                showResult('login-result', { error: error.message }, true);
+            }
+        }
+
+        async function testRegister() {
+            try {
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+                const fullName = document.getElementById('reg-name').value;
+
+                const response = await fetch(`${API_URL}/api/v2/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        full_name: fullName
+                        // organization_id is omitted
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    accessToken = data.access_token;
+                    localStorage.setItem('access_token', accessToken);
+                    showResult('register-result', { 
+                        status: response.status, 
+                        message: 'Registration successful!',
+                        user: data.user,
+                        token_preview: accessToken.substring(0, 50) + '...'
+                    });
+                } else {
+                    showResult('register-result', { status: response.status, error: data }, true);
+                }
+            } catch (error) {
+                showResult('register-result', { error: error.message }, true);
+            }
+        }
+
+        async function testProfile() {
+            try {
+                const token = accessToken || localStorage.getItem('access_token');
+                
+                if (!token) {
+                    showResult('profile-result', { error: 'No access token. Please login first.' }, true);
+                    return;
+                }
+
+                const response = await fetch(`${API_URL}/api/v2/auth/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('profile-result', { status: response.status, data });
+                } else {
+                    showResult('profile-result', { status: response.status, error: data }, true);
+                }
+            } catch (error) {
+                showResult('profile-result', { error: error.message }, true);
+            }
+        }
+
+        // Auto-test health on load
+        window.addEventListener('load', () => {
+            testHealth();
+        });
+    </script>
+</body>
+</html>

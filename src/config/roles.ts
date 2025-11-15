@@ -1,10 +1,10 @@
-// Role definitions
+// Role definitions - MUST match backend exactly (case-sensitive)
 export const ROLES = {
   SYSTEM_ADMIN: 'System Administrator',
   SAFETY_ANALYST: 'Safety Analyst',
   FLEET_MANAGER: 'Fleet Manager',
   DATA_ANALYST: 'Data Analyst',
-  VIEWER: 'Viewer',
+  VIEWER: 'viewer', // Backend role (lowercase) - FIXED
   USER: 'user', // Backend default role (lowercase)
   ADMIN: 'admin', // Backend admin role (lowercase)
 } as const;

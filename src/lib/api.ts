@@ -261,6 +261,11 @@ class ApiService {
       requestBody.organization_id = organizationId;
     }
     
+    // Debug logging
+    console.log('🔍 Register request body:', JSON.stringify(requestBody, null, 2));
+    console.log('🔍 organizationId param:', organizationId);
+    console.log('🔍 Will include organization_id?', !!(organizationId && organizationId.trim() !== ''));
+    
     const response = await this.request<any>('/api/v2/auth/register', {
       method: 'POST',
       body: JSON.stringify(requestBody),
@@ -444,17 +449,96 @@ class ApiService {
 
   // Analysis methods
   async analyzeFlightLog(file: File, metadata?: any) {
-    const formData = new FormData();
-    formData.append('file', file);
-    if (metadata) {
-      formData.append('metadata', JSON.stringify(metadata));
+    try {
+      // Validate file
+      if (!file || file.size === 0) {
+        throw new Error('Invalid or empty file');
+      }
+      
+      // Parse CSV file and convert to telemetry data
+      console.log('Reading file:', file.name, 'Size:', file.size, 'bytes');
+      const text = await file.text();
+      console.log('File content length:', text.length, 'characters');
+      
+      if (!text || text.trim().length === 0) {
+        throw new Error('File is empty');
+      }
+      
+      const telemetryData = this.parseCSVToTelemetry(text);
+      console.log('Parsed telemetry data:', telemetryData.total_points, 'data points');
+      
+      // Send to analysis endpoint
+      return this.createAnalysis({
+        aircraft_id: metadata?.aircraft_id || null,
+        telemetry_data: telemetryData,
+        metadata: metadata || {}
+      });
+    } catch (error) {
+      console.error('analyzeFlightLog error:', error);
+      throw error;
     }
+  }
 
-    return this.request<any>('/api/v2/analyze', {
-      method: 'POST',
-      body: formData,
-      headers: {}, // Let browser set Content-Type for FormData
-    });
+  private parseCSVToTelemetry(csvText: string): any {
+    try {
+      const lines = csvText.trim().split('\n').filter(line => line.trim().length > 0);
+      
+      if (lines.length < 2) {
+        throw new Error('Invalid CSV: File must have at least a header row and one data row');
+      }
+
+      // Parse header
+      const headers = lines[0].split(',').map(h => h.trim());
+      
+      if (headers.length === 0) {
+        throw new Error('Invalid CSV: No headers found');
+      }
+      
+      console.log('CSV headers:', headers);
+      
+      // Parse data rows
+      const dataPoints = [];
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue; // Skip empty lines
+        
+        const values = line.split(',');
+        const point: any = {};
+        
+        headers.forEach((header, index) => {
+          const value = values[index]?.trim();
+          if (!value) {
+            point[header] = null;
+            return;
+          }
+          
+          // Convert numeric values
+          if (!isNaN(Number(value))) {
+            point[header] = Number(value);
+          } else {
+            point[header] = value;
+          }
+        });
+        
+        dataPoints.push(point);
+      }
+
+      if (dataPoints.length === 0) {
+        throw new Error('Invalid CSV: No valid data rows found');
+      }
+
+      console.log('Parsed', dataPoints.length, 'data points');
+
+      return {
+        data_points: dataPoints,
+        total_points: dataPoints.length,
+        duration_seconds: dataPoints.length,
+        source: 'csv_upload'
+      };
+    } catch (error) {
+      console.error('CSV parsing error:', error);
+      throw new Error(`Failed to parse CSV: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   async getAnalyses(skip: number = 0, limit: number = 50) {

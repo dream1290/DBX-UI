@@ -1,0 +1,90 @@
+{
+  "aircraft_id": null,
+  "telemetry_data": {
+    "data_points": [
+      {
+        "timestamp": "2024-11-14T10:00:00Z",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "altitude_m": 0,
+        "speed_mps": 0,
+        "heading_deg": 0,
+        "battery_voltage": 12.6,
+        "battery_percent": 100,
+        "temperature_c": 22.5,
+        "vibration_x": 0.1,
+        "vibration_y": 0.1,
+        "vibration_z": 0.1,
+        "gps_satellites": 12,
+        "signal_strength": 95
+      },
+      {
+        "timestamp": "2024-11-14T10:00:05Z",
+        "latitude": 37.7753,
+        "longitude": -122.4190,
+        "altitude_m": 15,
+        "speed_mps": 8.0,
+        "heading_deg": 45,
+        "battery_voltage": 12.4,
+        "battery_percent": 97,
+        "temperature_c": 23.2,
+        "vibration_x": 0.6,
+        "vibration_y": 0.6,
+        "vibration_z": 0.6,
+        "gps_satellites": 12,
+        "signal_strength": 93
+      },
+      {
+        "timestamp": "2024-11-14T10:00:10Z",
+        "latitude": 37.7758,
+        "longitude": -122.4185,
+        "altitude_m": 40,
+        "speed_mps": 16.8,
+        "heading_deg": 45,
+        "battery_voltage": 12.2,
+        "battery_percent": 95,
+        "temperature_c": 24.5,
+        "vibration_x": 1.1,
+        "vibration_y": 1.1,
+        "vibration_z": 1.1,
+        "gps_satellites": 12,
+        "signal_strength": 90
+      },
+      {
+        "timestamp": "2024-11-14T10:00:15Z",
+        "latitude": 37.7761,
+        "longitude": -122.4180,
+        "altitude_m": 50,
+        "speed_mps": 20.0,
+        "heading_deg": 90,
+        "battery_voltage": 11.9,
+        "battery_percent": 92,
+        "temperature_c": 25.4,
+        "vibration_x": 1.4,
+        "vibration_y": 1.4,
+        "vibration_z": 1.4,
+        "gps_satellites": 12,
+        "signal_strength": 88
+      },
+      {
+        "timestamp": "2024-11-14T10:00:20Z",
+        "latitude": 37.7761,
+        "longitude": -122.4175,
+        "altitude_m": 50,
+        "speed_mps": 20.0,
+        "heading_deg": 90,
+        "battery_voltage": 11.7,
+        "battery_percent": 90,
+        "temperature_c": 25.9,
+        "vibration_x": 1.4,
+        "vibration_y": 1.4,
+        "vibration_z": 1.4,
+        "gps_satellites": 12,
+        "signal_strength": 85
+      }
+    ],
+    "total_points": 5,
+    "duration_seconds": 20,
+    "source": "test"
+  }
+}
