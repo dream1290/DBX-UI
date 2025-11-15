@@ -9,10 +9,13 @@ File upload showing "0 MB" and "error" status when uploading flight log CSV file
 **File:** `src/pages/UploadData.tsx`
 
 **Changes:**
+- Fixed TypeError by adding default empty array for recentFlights
+- Added array validation in useEffect to prevent map errors
 - Added file validation before processing
 - Added detailed console logging for debugging
 - Improved file size calculation precision (2 decimal places)
 - Better error messages in catch blocks
+- Removed unused imports
 
 ```typescript
 // Validate file

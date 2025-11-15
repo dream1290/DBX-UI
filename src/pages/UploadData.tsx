@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Upload, FileText, Zap, CheckCircle, AlertCircle, Clock, ExternalLink } from "lucide-react";
+import { Upload, FileText, Zap, CheckCircle, AlertCircle, Clock } from "lucide-react";
 import { FileHandler } from "@/components/genomic/FileHandler";
 import { GenomicCard } from "@/components/genomic/GenomicCard";
 import { ConservationScore } from "@/components/genomic/ConservationScore";
@@ -27,11 +26,11 @@ interface AnalysisJob {
 const UploadData = () => {
   const [analysisJobs, setAnalysisJobs] = useState<AnalysisJob[]>([]);
   const analyzeFlight = useAnalyzeFlight();
-  const { data: recentFlights } = useFlights({ limit: 10 });
+  const { data: recentFlights = [] } = useFlights({ limit: 10 });
 
   // Load recent flights as analysis jobs
   useEffect(() => {
-    if (recentFlights) {
+    if (recentFlights && Array.isArray(recentFlights) && recentFlights.length > 0) {
       const jobs: AnalysisJob[] = recentFlights.map((flight: any) => ({
         id: flight.id || flight.flight_id,
         filename: flight.filename || flight.file_name || 'Unknown file',
