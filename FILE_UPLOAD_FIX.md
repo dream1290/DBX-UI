@@ -18,6 +18,19 @@ File upload showing "0 MB" and "error" status when uploading flight log CSV file
 - Removed unused imports
 
 ```typescript
+// Fix TypeError by providing default empty array
+const { data: recentFlights = [] } = useFlights({ limit: 10 });
+
+// Add array validation in useEffect
+useEffect(() => {
+  if (recentFlights && Array.isArray(recentFlights) && recentFlights.length > 0) {
+    const jobs: AnalysisJob[] = recentFlights.map((flight: any) => ({
+      // ... mapping logic
+    }));
+    setAnalysisJobs(jobs);
+  }
+}, [recentFlights]);
+
 // Validate file
 if (!file || file.size === 0) {
   console.error('Invalid or empty file:', file);

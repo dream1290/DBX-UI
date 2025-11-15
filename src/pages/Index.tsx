@@ -171,7 +171,7 @@ const Index = () => {
             <StatsCardSkeleton />
             <StatsCardSkeleton />
           </>
-        ) : (
+        ) : stats && Array.isArray(stats) ? (
           stats.map((stat) => (
             <GenomicCard key={stat.title} className="p-4">
               <div className="flex items-center justify-between mb-3">
@@ -188,6 +188,10 @@ const Index = () => {
               </div>
             </GenomicCard>
           ))
+        ) : (
+          <div className="col-span-4 text-center text-muted-foreground">
+            No statistics available
+          </div>
         )}
       </div>
 
@@ -215,7 +219,7 @@ const Index = () => {
                   <FlightCardSkeleton />
                   <FlightCardSkeleton />
                 </>
-              ) : recentAnalyses.length === 0 ? (
+              ) : !recentAnalyses || recentAnalyses.length === 0 ? (
                 <div className="text-center py-8">
                   <Activity className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
                   <p className="text-muted-foreground mb-2">No flight analyses yet</p>
@@ -230,7 +234,7 @@ const Index = () => {
                     Upload Flight Data
                   </Button>
                 </div>
-              ) : (
+              ) : recentAnalyses && Array.isArray(recentAnalyses) && recentAnalyses.length > 0 ? (
                 recentAnalyses.map((analysis: any) => (
                   <div key={analysis.id} className="flex items-center justify-between p-4 bg-secondary/20 rounded-lg border border-border/30">
                     <div className="flex items-center gap-4">
@@ -263,6 +267,10 @@ const Index = () => {
                     </div>
                   </div>
                 ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>No recent analyses available</p>
+                </div>
               )}
               <Button 
                 variant="outline" 

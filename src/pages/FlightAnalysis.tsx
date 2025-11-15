@@ -154,7 +154,7 @@ const FlightAnalysis = () => {
           </>
         ) : filteredAnalyses.length === 0 && !searchQuery && filterType === "all" ? (
           <EmptyFlights />
-        ) : (
+        ) : filteredAnalyses && Array.isArray(filteredAnalyses) ? (
           filteredAnalyses.map((analysis: any) => (
           <GenomicCard key={analysis.id || analysis.flight_id} className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -253,6 +253,10 @@ const FlightAnalysis = () => {
             </div>
           </GenomicCard>
           ))
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            <p>No analyses available</p>
+          </div>
         )}
 
 
